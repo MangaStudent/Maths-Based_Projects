@@ -1,0 +1,81 @@
+# import numpy library 
+import numpy as np 
+
+    # Generate new random matrix
+# 1st argument --> numbers ranging from 0 to 9,  
+# 2nd argument, row = 2, col = 3 
+X = np.random.randint(10, size=(4, 4)) 
+print(X)
+
+    # Choose your starting column
+column = int(input("What column to start on? "))
+#while isdigit(column) != 'True':
+#    column = ("Enter a number: ")
+print("")
+
+
+    # These will store the locations of the weights in rows and columns later
+columns = []
+rows = []
+weights = []
+
+    # Adjusting to python's numerical indexing system (starting from 0, not 1)
+column -= 1
+columns_to_check = []
+columns_to_check.append(column)
+
+    # Erase the initial row and print the change
+for i in range(len(X)):
+    X[column][i] = 0
+#print(X)																						                                   # Debug only
+
+
+
+# Prim's Algorithm for each column
+def prim_column(columns_to_check):
+        # A ridiculously high minimum
+    min = 1000000000000000000000
+        # An impossibly low weight for the graph and high for the global minimum weight
+    min_row = 0
+    next_min_row = 1000000000000000000000
+    next_min_column = 1000000000000000000000
+
+    for column in columns_to_check:
+            # Goes through the column and finds the min weight
+        for row in range(len(X)):
+            if (0 < (X[row][column])) and ((X[row][column]) <= min):
+                min = X[row][column]
+                    # Stores the new location for that column
+                min_row = row
+                min_column = column
+            # Stores the final minimum weighted location for all columns checked
+        if next_min_row >= min_row:
+            next_min_row = min_row
+            next_min_column = min_column
+
+        # Display for debugging
+#    print("Value = ", min)																		                          # Debug only
+#    print("Location = [", next_min_row + 1, "]", "[", next_min_column + 1, "]")				# Debug only
+
+        # Store the locations and weights
+    columns.append(next_min_column)
+    rows.append(next_min_row)
+    weights.append(min)
+
+        # Set all values in that row to 0
+    for i in range(len(X)):
+        X[next_min_row][i] = 0
+#    print("")																					                                # Debug only
+#    print(X)																					                                  # Debug only
+    columns_to_check.append(next_min_row)
+    return columns_to_check
+
+    # Run the function however many times
+for y in range(len(X) - 1):
+        prim_column(columns_to_check)
+print("")
+
+    # Display the data
+print("Column", "Row")
+for y in range(len(columns)):
+    print("[", columns[y] + 1, "]", "[", rows[y] + 1, "],", "Weight:", weights[y], "\n")
