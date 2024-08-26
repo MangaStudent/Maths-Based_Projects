@@ -4,15 +4,21 @@ import numpy as np
     # Generate new random matrix
 # 1st argument --> numbers ranging from 0 to 9,  
 # 2nd argument, row = 2, col = 3 
-X = np.random.randint(10, size=(4, 4)) 
+X = np.random.randint(10, size=(4, 4)) # Considering having the matrix size as a user input
 print(X)
 
-    # Choose your starting column
-column = int(input("What column to start on? "))
-#while isdigit(column) != 'True':
-#    column = ("Enter a number: ")
+    # Choose your starting column with input screening
+column = 'a'
+while column.isdigit() != True:
+    column = input("Enter the column you want to start on (enter an integer between 1 and 4): ")
 print("")
+column = int(column)
 
+    # Correcting for inputs outside of our 4x4 matrix
+if column > 4:
+    column = 4
+if column < 1:
+    column = 1
 
     # These will store the locations of the weights in rows and columns later
 columns = []
@@ -27,7 +33,7 @@ columns_to_check.append(column)
     # Erase the initial row and print the change
 for i in range(len(X)):
     X[column][i] = 0
-#print(X)																					    # Debug only
+#print(X)																						# Debug only
 
 
 
@@ -37,6 +43,7 @@ def prim_column(columns_to_check):
     min = 1000000000000000000000
         # An impossibly low weight for the graph and high for the global minimum weight
     min_row = 0
+    min_column = 0
     next_min_row = 1000000000000000000000
     next_min_column = 1000000000000000000000
 
@@ -76,6 +83,7 @@ for y in range(len(X) - 1):
 print("")
 
     # Display the data
+    # Column -> Row is the arc of the minimum spanning tree (Column and Row representing the nodes), with the weight shown adjacent
 print("Column", "Row")
 for y in range(len(columns)):
     print("[", columns[y] + 1, "]", "[", rows[y] + 1, "],", "Weight:", weights[y], "\n")
